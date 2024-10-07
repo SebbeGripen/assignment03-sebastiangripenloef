@@ -4,7 +4,7 @@ import { DashboardPage } from './pages/dashboard-page';
 import { ClientsPage } from './pages/clients-page';
 import { CreateClientsPage } from './pages/createclients-page';
 
-test.describe('Test suite 02', () => {
+test.describe('Test suite 01', () => {
   test('Test case 01 testing the dashboard', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
@@ -40,7 +40,7 @@ test.describe('Test suite 02', () => {
   });
 });
 
-test.describe('Test suite 02', () => {
+test.describe('Test suite 01', () => {
   test('Test case 02 create a client and save it', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
