@@ -74,3 +74,67 @@ test.describe('Test suite 01', () => {
 
   });
 });
+
+test('Test case 01 - Backend, test if one can login and get all clients.', async ({ request }) => {
+  const response = await request.post('http://localhost:3000/api/login', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      username: process.env.TEST_USERNAME,
+      password: process.env.TEST_PASSWORD
+    }
+  });
+
+  const jsonResponse = await response.json();
+  const accessToken = jsonResponse.token;
+  const username = process.env.TEST_USERNAME;
+  const getPostsResponse = await request.get('http://localhost:3000/api/clients', {
+    headers: {
+      'x-user-auth': JSON.stringify({ 
+        username: username,
+        token: accessToken
+      }),
+      'Content-Type': 'application/json'
+    }
+  });
+  expect(getPostsResponse.ok()).toBeTruthy();
+  expect(getPostsResponse.status()).toBe(200);
+
+  const getAllClients = await getPostsResponse.json();
+  console.log(getAllClients);
+});
+
+
+
+test('Test case 02 - Backend, tests if you can login and get all the rooms.', async ({ request }) => {
+
+  const response = await request.post('http://localhost:3000/api/login', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      username: process.env.TEST_USERNAME,
+      password: process.env.TEST_PASSWORD
+    }
+  });
+
+  const jsonResponse = await response.json();
+  const accessToken = jsonResponse.token;
+  const username = process.env.TEST_USERNAME;
+
+
+  const getPostsResponse = await request.get('http://localhost:3000/api/Rooms', {
+    headers: {
+      'x-user-auth': JSON.stringify({
+        username: username,
+        token: accessToken
+      }),
+      'Content-Type': 'application/json'
+    }
+  });
+  expect(getPostsResponse.ok()).toBeTruthy();
+  expect(getPostsResponse.status()).toBe(200);
+  const getAllRooms = await getPostsResponse.json();
+  console.log(getAllRooms);
+});
