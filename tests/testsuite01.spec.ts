@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from './pages/login-page.ts';
-import { DashboardPage } from './pages/dashboard-page';
-import { ClientsPage } from './pages/clients-page';
-import { CreateClientsPage } from './pages/createclients-page';
+import { DashboardPage } from './pages/dashboard-page.ts';
+import { ClientsPage } from './pages/clients-page.ts';
+import { CreateClientsPage } from './pages/createclients-page.ts';
 
 test.describe('Test suite 01', () => {
   test('Test case 01 testing the dashboard', async ({ page }) => {
