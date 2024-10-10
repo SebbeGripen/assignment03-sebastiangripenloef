@@ -75,7 +75,7 @@ test.describe('Test suite 01', () => {
   });
 });
 
-test('Test case 01 - Backend, test if one can login and get all clients.', async ({ request }) => {
+test('Test case 01 - Backend, test if one can login and get all rooms.', async ({ request }) => {
   const response = await request.post('http://localhost:3000/api/login', {
     headers: {
       'Content-Type': 'application/json',
@@ -87,13 +87,13 @@ test('Test case 01 - Backend, test if one can login and get all clients.', async
   });
 
   const jsonResponse = await response.json();
-  const accessToken = jsonResponse.token;
+  const getToken = jsonResponse.token;
   const username = process.env.TEST_USERNAME;
-  const getPostsResponse = await request.get('http://localhost:3000/api/clients', {
+  const getPostsResponse = await request.get('http://localhost:3000/api/rooms', {
     headers: {
       'x-user-auth': JSON.stringify({ 
         username: username,
-        token: accessToken
+        token: getToken
       }),
       'Content-Type': 'application/json'
     }
@@ -101,13 +101,13 @@ test('Test case 01 - Backend, test if one can login and get all clients.', async
   expect(getPostsResponse.ok()).toBeTruthy();
   expect(getPostsResponse.status()).toBe(200);
 
-  const getAllClients = await getPostsResponse.json();
-  console.log(getAllClients);
+  const getAllRooms = await getPostsResponse.json();
+  console.log(getAllRooms);
 });
 
 
 
-test('Test case 02 - Backend, tests if you can login and get all the rooms.', async ({ request }) => {
+test('Test case 02 - Backend, tests if you can login and get all the bills.', async ({ request }) => {
 
   const response = await request.post('http://localhost:3000/api/login', {
     headers: {
@@ -120,21 +120,21 @@ test('Test case 02 - Backend, tests if you can login and get all the rooms.', as
   });
 
   const jsonResponse = await response.json();
-  const accessToken = jsonResponse.token;
+  const getToken = jsonResponse.token;
   const username = process.env.TEST_USERNAME;
 
 
-  const getPostsResponse = await request.get('http://localhost:3000/api/Rooms', {
+  const getPostsResponse = await request.get('http://localhost:3000/api/bills', {
     headers: {
       'x-user-auth': JSON.stringify({
         username: username,
-        token: accessToken
+        token: getToken
       }),
       'Content-Type': 'application/json'
     }
   });
   expect(getPostsResponse.ok()).toBeTruthy();
   expect(getPostsResponse.status()).toBe(200);
-  const getAllRooms = await getPostsResponse.json();
-  console.log(getAllRooms);
+  const getAllBills = await getPostsResponse.json();
+  console.log(getAllBills);
 });
