@@ -4,12 +4,10 @@ on:
   push:
     branches:
       - main
-      - sebastianDevelopment
 
   pull_request:
     branches:
       - main
-      - sebastianDevelopment
 
 jobs:
   run-automated-tests:
@@ -18,28 +16,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
 
       - name: Install Node packages
         run: npm install
 
-      - name: Start application
-        run: |
-          docker run -d \
-            --name my-api \
-            -p 3000:3000 \
-            -e DATABASE_URL=postgres://user:password@host:port/mydatabase \
-            
+      
+      - name: Docker image
+        run: docker pull thirsty_rubin/my-vue-app:v1
 
-      - name: Wait for application to be ready
-        run: |
-          until curl -s http://localhost:3000/health; do
-            echo "Waiting for application to be ready..."
-            sleep 2
-          done
+      - name: Start application
+        run: docker run -d -p 3000:3000 thirsty_rubin/my-vue-app:v1
 
       - name: Run Playwright tests
         run: npx playwright test
