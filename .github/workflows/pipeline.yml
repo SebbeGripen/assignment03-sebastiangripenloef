@@ -25,10 +25,7 @@ jobs:
         run: npm install --unsafe-perm
 
       - name: Install Playwright
-        run: npx playwright install
-
-      - name: Fix permissions for Node modules
-        run: chmod -R 755 node_modules
+        run: npm run playwright install
 
       - name: Pull Docker image
         run: docker pull rasilva1986/my-vue-app:v1
