@@ -3,12 +3,12 @@ on:
   push:
     branches:
       - main
-      - gh-actions
+      - sebastianDevelopment
 
   pull_request:
     branches:
       - main
-      - gh-actions
+      - sebastianDevelopment
 
 jobs:
   run-automated-tests:
