@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "server": "docker-compose up",
-    "run-tests": "npx playwright test",
+    "run-tests": "npx playwright test tests/testsuite01.spec.ts",
     "ui-mode": "npx playwright test --ui"
   },
   "keywords": [],
