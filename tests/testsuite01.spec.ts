@@ -75,7 +75,7 @@ test.describe('Test suite 01', () => {
   });
 });
 
-test('Test case 01 - Backend, test if one can login and get all rooms.', async ({ request }) => {
+test('Test case 03 - Backend, test if one can login and get all rooms.', async ({ request }) => {
   const response = await request.post('http://localhost:3000/api/login', {
     headers: {
       'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ test('Test case 01 - Backend, test if one can login and get all rooms.', async (
 
 
 
-test('Test case 02 - Backend, tests if you can login and get all the bills.', async ({ request }) => {
+test('Test case 04 - Backend, tests if you can login and get all the reservations.', async ({ request }) => {
 
   const response = await request.post('http://localhost:3000/api/login', {
     headers: {
@@ -124,7 +124,7 @@ test('Test case 02 - Backend, tests if you can login and get all the bills.', as
   const username = process.env.TEST_USERNAME;
 
 
-  const getPostsResponse = await request.get('http://localhost:3000/api/bills', {
+  const getPostsResponse = await request.get('http://localhost:3000/api/reservations', {
     headers: {
       'x-user-auth': JSON.stringify({
         username: username,
@@ -135,6 +135,6 @@ test('Test case 02 - Backend, tests if you can login and get all the bills.', as
   });
   expect(getPostsResponse.ok()).toBeTruthy();
   expect(getPostsResponse.status()).toBe(200);
-  const getAllBills = await getPostsResponse.json();
-  console.log(getAllBills);
+  const getAllReservations = await getPostsResponse.json();
+  console.log(getAllReservations);
 });
