@@ -22,11 +22,6 @@ jobs:
           POSTGRES_USER: user
           POSTGRES_PASSWORD: password
           POSTGRES_DB: mydatabase
-        options: >                 # Ensure the service is healthy
-          --health-cmd="pg_isready -U user" 
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     steps:
       - name: Checkout code
