@@ -25,7 +25,7 @@ jobs:
         run: npm install --unsafe-perm
 
       - name: Install Playwright
-        run: npx playwright install --with-deps
+        run: npm install --unsafe-perm playwright
 
       - name: Pull Docker image
         run: docker pull rasilva1986/my-vue-app:v1
