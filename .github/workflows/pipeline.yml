@@ -8,9 +8,8 @@ on:
     branches:
       - main
       - sebastianDevelopment
-  workflow_dispatch:  # Enables manual run
 
-jobs:
+job:
   run-automated-tests:
     runs-on: ubuntu-latest
     steps:
