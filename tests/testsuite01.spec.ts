@@ -91,7 +91,7 @@ test('Test case 03 - Backend, test if one can login and get all rooms.', async (
   const username = process.env.TEST_USERNAME;
   const getPostsResponse = await request.get('http://localhost:3000/api/rooms', {
     headers: {
-      'x-user-auth': JSON.stringify({ 
+      'x-user-auth': JSON.stringify({
         username: username,
         token: getToken
       }),
