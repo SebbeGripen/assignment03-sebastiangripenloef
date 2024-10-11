@@ -25,7 +25,7 @@ jobs:
         run: npm install --unsafe-perm
 
       - name: Install Playwright
-        run: npm run playwright install
+        run: npx playwright install --with-deps
 
       - name: Pull Docker image
         run: docker pull rasilva1986/my-vue-app:v1
@@ -40,7 +40,7 @@ jobs:
         env:
           TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-        run: npm run run-tests
+        run: npx playwright test tests/testsuite01.spec.ts
 
       - name: Save test run artifacts
         uses: actions/upload-artifact@v4
