@@ -4,11 +4,11 @@ on:
     branches:
       - main
       - sebastianDevelopment
-
   pull_request:
     branches:
       - main
       - sebastianDevelopment
+  workflow_dispatch:  # Enables manual run
 
 jobs:
   run-automated-tests:
