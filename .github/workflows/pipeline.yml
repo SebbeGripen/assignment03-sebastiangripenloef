@@ -16,16 +16,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-
       - name: Install Node packages
         run: npm install
 
-      
-      - name: Docker image
+      - name: Pull Docker image
         run: docker pull thirsty_rubin/my-vue-app:v1
 
       - name: Start application
-        run: docker run -d -p 3000:3000 thirsty_rubin/my-vue-app:<none>
+        run: |
+          docker run -d \
+            --name my-vue-app \
+            -p 3000:3000 \
+            thirsty_rubin/my-vue-app:v1
+
+      - name: Wait until the application is up
+        run: npx wait-on http://localhost:3000/
 
       - name: Run Playwright tests
         run: npx playwright test
