@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - sebastianDevelopment
+
   pull_request:
     branches:
       - main
@@ -12,42 +13,35 @@ on:
 
 jobs:
   run-automated-tests:
-    runs-on: ubuntu-latest  # Use Ubuntu runner
-    services:
-      db:                         # Define the PostgreSQL service
-        image: postgres:13
-        ports:
-          - 5432:5432             # Exposing PostgreSQL port
-        env:
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: mydatabase
-
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install node packages
+      - name: Install Node packages
         run: npm install
 
-      - name: Wait for PostgreSQL to be ready
+      - name: Start application
         run: |
-          while ! pg_isready -h localhost -p 5432 -U user; do 
-            echo "Waiting for PostgreSQL to be ready..."
-            sleep 1
+          docker run -d \
+            --name my-api \
+            -p 3000:3000 \
+            -e DATABASE_URL=postgres://user:password@host:port/mydatabase \
+            my-api-image
+
+      - name: Wait for application to be ready
+        run: |
+          until curl -s http://localhost:3000/health; do
+            echo "Waiting for application to be ready..."
+            sleep 2
           done
 
-      - name: Start application
-        run: npm run server    # This runs your app on port 3000
-
-      - name: Run tests
-        env:
-          DATABASE_URL: postgres://user:password@localhost:5432/mydatabase  # Connection string for PostgreSQL
+      - name: Run Playwright tests
         run: npx playwright test
 
       - name: Save test run artifacts
