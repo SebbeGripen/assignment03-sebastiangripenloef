@@ -32,7 +32,7 @@ jobs:
             --name my-api \
             -p 3000:3000 \
             -e DATABASE_URL=postgres://user:password@host:port/mydatabase \
-            my-vue-app
+            
 
       - name: Wait for application to be ready
         run: |
