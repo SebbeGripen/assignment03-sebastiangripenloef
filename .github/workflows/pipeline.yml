@@ -16,11 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Install Node packages
-        run: npm install
-        
-      - name: Install playwright
+        run: npm install --unsafe-perm
+
+      - name: Install Playwright
         run: npx playwright install
+
+      - name: Fix permissions for Node modules
+        run: chmod -R 755 node_modules
 
       - name: Pull Docker image
         run: docker pull rasilva1986/my-vue-app:v1
@@ -33,9 +41,9 @@ jobs:
 
       - name: Run tests
         env:
-          TEST_USERNAME: ${{ secrets.TEST_USERNAME}}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD}}
-        run:  npm run run-tests
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: npm run run-tests
 
       - name: Save test run artifacts
         uses: actions/upload-artifact@v4
