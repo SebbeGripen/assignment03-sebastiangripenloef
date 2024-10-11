@@ -1,5 +1,4 @@
 name: Pipeline
-
 on:
   push:
     branches:
@@ -13,23 +12,8 @@ on:
 jobs:
   run-automated-tests:
     runs-on: ubuntu-latest
-    services:
-      db:                         # Defining the PostgreSQL service
-        image: postgres:13
-        ports:
-          - 5432:5432             # Exposing the PostgreSQL port
-        env:
-          POSTGRES_USER: user      # Setting up environment variables
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: mydatabase
-        options: >                 # Options to ensure the service is healthy
-          --health-cmd="pg_isready -U user" 
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      - name: Checkout code
+      - name: Checkout code / Fetch code
         uses: actions/checkout@v4
 
       - name: Setup Node.js version
@@ -40,18 +24,10 @@ jobs:
       - name: Install node packages
         run: npm install
 
-      - name: Wait for PostgreSQL to be ready
-        run: until pg_isready -h localhost -p 5432 -U user; do sleep 1; done
-
-      - name: Run Migrations or Seed Database
-        run: npm run migrate   # Run your migration scripts here
-
       - name: Start application
-        run: npm run server    # Assuming this runs your app on port 3000
+        run: npm run server
 
-      - name: Run tests
-        env:
-          DATABASE_URL: postgres://user:password@localhost:5432/mydatabase  # Connection string for PostgreSQL
+      - name: Runs tests
         run: npx playwright test
 
       - name: Save test run artifacts
