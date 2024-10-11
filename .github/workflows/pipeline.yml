@@ -9,7 +9,7 @@ on:
       - main
       - sebastianDevelopment
 
-job:
+jobs:
   run-automated-tests:
     runs-on: ubuntu-latest
     steps:
