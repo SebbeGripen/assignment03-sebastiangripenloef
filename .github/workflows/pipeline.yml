@@ -25,7 +25,7 @@ jobs:
         run: npm install --unsafe-perm
 
       - name: Install Playwright
-        run: npm install --unsafe-perm playwright
+        run: npx install --unsafe-perm playwright
 
       - name: Fix Playwright Permissions
         run: chmod +x ./node_modules/.bin/playwright
