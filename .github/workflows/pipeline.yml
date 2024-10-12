@@ -1,54 +1,49 @@
-name: Pipeline
-
+name: Hannes Pipline
+# trigger jobs by push things to branchens main or gh-actions
 on:
   push:
-    branches:
-      - main
-
+    branches: [ main, gh-actions ]
   pull_request:
-    branches:
-      - main
-
+    branches: [ main, gh-actions ]
 jobs:
-  run-automated-tests:
+  tests:
+    # runs on this container 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    #checkout code
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # install dependencies
+    - name: Install dependencies
+      run: npm install
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    # install playright
+    - name: Install Playwright 
+      run: npx playwright install
 
-      - name: Install Node packages
-        run: npm install --unsafe-perm
+    # Pull down docker image from dockerhub
+    - name: Pull docker image
+      run: docker pull rasilva1986/my-vue-app:v1 
 
-      - name: Install Playwright
-        run: npm install --unsafe-perm playwright
+    # Run docer container
+    - name: Run docker container
+      run: docker run -d -p 3000:3000 rasilva1986/my-vue-app:v1
 
-      - name: Fix Playwright Permissions
-        run: chmod +x ./node_modules/.bin/playwright
+    # wait for server to be okay
+    - name: Wait for server running
+      run: npx wait-on http://localhost:3000
 
-      - name: Pull Docker image
-        run: docker pull rasilva1986/my-vue-app:v1
+    # run playwright tests
+    - name: run tests
+      env: 
+        USERNAME: ${{secrets.USERNAME}}
+        PASSWORD: ${{secrets.PASSWORD}}
+      run: npm run run-tests
 
-      - name: Start application
-        run: docker run -d -p 3000:3000 rasilva1986/my-vue-app:v1
-
-      - name: Wait until the application is up
-        run: npx wait-on http://localhost:3000/
-
-      - name: Run tests
-        env:
-          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
-          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-        run: npx playwright test
-
-      - name: Save test run artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-test-results
-          path: ./playwright-report
-          if-no-files-found: warn
-          include-hidden-files: false
+    # save test-results 
+    - name: save testresults to artifacts 
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-test-results
+        path: ./playwright-report
