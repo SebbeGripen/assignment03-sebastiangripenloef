@@ -1,49 +1,51 @@
-name: Hannes Pipline
-# trigger jobs by push things to branchens main or gh-actions
+name: Pipeline
+
 on:
   push:
-    branches: [ main, gh-actions ]
+    branches:
+      - main
+
   pull_request:
-    branches: [ main, gh-actions ]
+    branches:
+      - main
+
 jobs:
-  tests:
-    # runs on this container 
+  run-automated-tests:
     runs-on: ubuntu-latest
     steps:
-    #checkout code
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    # install dependencies
-    - name: Install dependencies
-      run: npm install
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # install playright
-    - name: Install Playwright 
-      run: npx playwright install
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    # Pull down docker image from dockerhub
-    - name: Pull docker image
-      run: docker pull rasilva1986/my-vue-app:v1 
+      - name: Install Node packages
+        run: npm install
 
-    # Run docer container
-    - name: Run docker container
-      run: docker run -d -p 3000:3000 rasilva1986/my-vue-app:v1
+      - name: Install Playwright
+        run: npm install --unsafe-perm playwright
 
-    # wait for server to be okay
-    - name: Wait for server running
-      run: npx wait-on http://localhost:3000
+      - name: Pull Docker image
+        run: docker pull rasilva1986/my-vue-app:v1
 
-    # run playwright tests
-    - name: run tests
-      env: 
-        USERNAME: ${{secrets.USERNAME}}
-        PASSWORD: ${{secrets.PASSWORD}}
-      run: npm run run-tests
+      - name: Start application
+        run: docker run -d -p 3000:3000 rasilva1986/my-vue-app:v1
 
-    # save test-results 
-    - name: save testresults to artifacts 
-      uses: actions/upload-artifact@v4
-      with:
-        name: playwright-test-results
-        path: ./playwright-report
+      - name: Wait until the application is up
+        run: npx wait-on http://localhost:3000/
+
+      - name: Run tests
+        env:
+          TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+        run: npx playwright test
+
+      - name: Save test run artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: ./playwright-report
+          if-no-files-found: warn
+          include-hidden-files: false
