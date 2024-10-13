@@ -18,16 +18,18 @@ jobs:
       - name: Fetch code /Checkout code 
         uses: actions/checkout@v4
 
+      - name: Setup Node.js version
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       #install packages
       - name: Install dependencies
         run: npm install
 
-      - name: Add execute permissions to playwright
-        run: sudo chmod +x ./node_modules/.bin/playwright
-
       #install playwright
       - name: Install playwright
-        run: sudo npx playwright install
+        run: npx playwright install
 
       #pull docker image
       - name: Pull Docker image
