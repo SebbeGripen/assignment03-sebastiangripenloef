@@ -30,6 +30,7 @@ jobs:
 
       - name: Add execution permission for node_modules/.bin
         run: chmod +x ./node_modules/.bin/*
+        
 
       #install playwright
       - name: Install playwright
