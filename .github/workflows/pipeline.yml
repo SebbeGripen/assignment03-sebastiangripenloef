@@ -22,9 +22,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Add execute permissions to playwright
+        run: sudo chmod +x ./node_modules/.bin/playwright
+
       #install playwright
       - name: Install playwright
-        run: npx playwright install
+        run: sudo npx playwright install
 
       #pull docker image
       - name: Pull Docker image
