@@ -28,11 +28,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Add execution permission for node_modules/.bin
+        run: chmod +x ./node_modules/.bin/*
+
       #install playwright
-      - name: Install Playwright
-        uses: microsoft/playwright-github-action@v1
-        with:
-          playwright-version: 1.47.2
+      - name: Install playwright
+        run: npx playwright install
 
       #pull docker image
       - name: Pull Docker image
